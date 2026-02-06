@@ -1,11 +1,11 @@
-package id.cs.ui.ac.advprog.eshop.model;
+package id.ac.ui.cs.advprog.eshop.model;
 
 import lombok.Getter;
 import lombok.Setter;
 import java.util.UUID;
 
 @Getter @Setter
-public class product {
+public class Product {
     private UUID productId;
     private String productName;
     private int productQuantity;
