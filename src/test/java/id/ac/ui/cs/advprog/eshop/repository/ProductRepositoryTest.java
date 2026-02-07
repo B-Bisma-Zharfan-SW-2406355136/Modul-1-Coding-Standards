@@ -53,7 +53,7 @@ public class ProductRepositoryTest {
         productRepository.create(product1);
 
         Product product2 = new Product();
-        product2.setProductId(UUID.fromString("a0f9de46-90b1-437d-a0bf-d0821dde9096)"));
+        product2.setProductId(UUID.fromString("a0f9de46-90b1-437d-a0bf-d0821dde9096"));
         product2.setProductName("Sampo Cap Usep");
         product2.setProductQuantity(50);
         productRepository.create(product2);
