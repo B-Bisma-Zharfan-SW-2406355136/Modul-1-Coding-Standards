@@ -9,5 +9,5 @@ public interface ProductService {
     public List<Product> findAll();
     public void update(Product product);
     public Product findById(UUID id);
-    public void delete(Product product);
+    public void deleteById(UUID id);
 }

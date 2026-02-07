@@ -41,10 +41,12 @@ public class ProductRepository {
         }
     }
 
-    public void delete(Product targetProduct){
-        for(Product product : productData){
-            if(product.getProductId().equals(targetProduct.getProductId())){
-                productData.remove(product);
+    public void deleteById(UUID id) {
+        Iterator<Product> iterator = productData.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getProductId().equals(id)) {
+                iterator.remove();
                 break;
             }
         }
