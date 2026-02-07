@@ -22,7 +22,7 @@ public class ProductRepository {
         return productData.iterator();
     }
 
-    public Product findProductById(UUID targetId){
+    public Product findById(UUID targetId){
         for(Product product : productData){
             if(product.getProductId().equals(targetId)){
                 return product;
@@ -31,7 +31,7 @@ public class ProductRepository {
         return null;
     }
 
-    public void updateProduct(Product newProduct){
+    public void update(Product newProduct){
         for(Product product : productData){
             if(product.getProductId().equals(newProduct.getProductId())){
                 product.setProductName(newProduct.getProductName());
