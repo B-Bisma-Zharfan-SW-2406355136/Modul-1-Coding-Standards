@@ -36,4 +36,17 @@ public class ProductController {
         model.addAttribute("products", allProduct);
         return "productList";
     }
+
+    @GetMapping("/update/{id}")
+    public String productUpdatePage(@PathVariable UUID id, Model model){
+        Product product = service.findById(id);
+        model.addAttribute("product", product);
+        return "updateProduct";
+    }
+
+    @PostMapping("/update/{id}")
+    public String productUpdatePost(@ModelAttribute Product product){
+        service.update(product);
+        return "redirect:list";
+    }
 }
