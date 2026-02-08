@@ -18,57 +18,88 @@ class ProductRepositoryTest {
 
     @InjectMocks
     ProductRepository productRepository;
+    Product product;
 
     @BeforeEach
     void setUp() {
+        this.product = new Product();
+        this.product.setProductId(UUID.fromString("eb558e9f-1c39-460e-8860-71af6af63bd6"));
+        this.product.setProductName("Sampo Cap Bambang");
+        this.product.setProductQuantity(100);
+        this.productRepository.create(this.product);
     }
 
     @Test
     void testCreateAndFind() {
-        Product product = new Product();
-        product.setProductId(UUID.fromString("eb558e9f-1c39-460e-8860-71af6af63bd6"));
-        product.setProductName("Sampo Cap Bambang");
-        product.setProductQuantity(100);
-        productRepository.create(product);
-
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
 
         Product savedProduct = productIterator.next();
-        assertEquals(product.getProductId(), savedProduct.getProductId());
-        assertEquals(product.getProductName(), savedProduct.getProductName());
-        assertEquals(product.getProductQuantity(), savedProduct.getProductQuantity());
+        assertEquals(this.product.getProductId(), savedProduct.getProductId());
+        assertEquals(this.product.getProductName(), savedProduct.getProductName());
+        assertEquals(this.product.getProductQuantity(), savedProduct.getProductQuantity());
     }
 
     @Test
     void testFindAllIfEmpty() {
-        Iterator<Product> productIterator = productRepository.findAll();
+        ProductRepository productRepositoryEmpty = new ProductRepository();
+        Iterator<Product> productIterator = productRepositoryEmpty.findAll();
         assertFalse(productIterator.hasNext());
     }
 
     @Test
     void testFindAllIfMoreThanOneProduct() {
-        Product product1 = new Product();
-        product1.setProductId(UUID.fromString("eb558e9f-1c39-460e-8860-71af6af63bd6"));
-        product1.setProductName("Sampo Cap Bambang");
-        product1.setProductQuantity(100);
-        productRepository.create(product1);
-
         Product product2 = new Product();
         product2.setProductId(UUID.fromString("a0f9de46-90b1-437d-a0bf-d0821dde9096"));
         product2.setProductName("Sampo Cap User");
         product2.setProductQuantity(50);
-        productRepository.create(product2);
+        this.productRepository.create(product2);
 
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
 
         Product savedProduct = productIterator.next();
-        assertEquals(product1.getProductId(), savedProduct.getProductId());
+        assertEquals(this.product.getProductId(), savedProduct.getProductId());
 
         savedProduct = productIterator.next();
         assertEquals(product2.getProductId(), savedProduct.getProductId());
 
         assertFalse(productIterator.hasNext());
+    }
+
+    @Test
+    void testFindById(){
+        UUID targetId = this.product.getProductId();
+        assertEquals(this.product, this.productRepository.findById(targetId));
+    }
+
+    @Test
+    void testFindByIdNotFound(){
+        UUID randomId = UUID.randomUUID();
+        assertEquals(null, this.productRepository.findById(randomId));
+    }
+
+    @Test
+    void testUpdateProduct(){
+        Product newProduct = new Product();
+        newProduct.setProductId(this.product.getProductId());
+        newProduct.setProductName("Sampo Cap Bambang 2");
+        newProduct.setProductQuantity(115);
+        this.productRepository.update(newProduct);
+
+        assertEquals(this.product.getProductName(), "Sampo Cap Bambang 2");
+        assertEquals(this.product.getProductQuantity(), 115);
+    }
+
+    @Test
+    void testUpdateProductNotFound(){
+        Product newProduct = new Product();
+        newProduct.setProductId(UUID.randomUUID());
+        newProduct.setProductName("Sampo Cap Bambang 2");
+        newProduct.setProductQuantity(115);
+        this.productRepository.update(newProduct);
+
+        assertNotEquals(this.product.getProductName(), "Sampo Cap Bambang 2");
+        assertNotEquals(this.product.getProductQuantity(), 115);
     }
 }
