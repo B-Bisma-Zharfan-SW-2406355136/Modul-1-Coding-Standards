@@ -40,4 +40,15 @@ public class ProductRepository {
             }
         }
     }
+
+    public void deleteById(UUID id) {
+        Iterator<Product> iterator = productData.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getProductId().equals(id)) {
+                iterator.remove();
+                break;
+            }
+        }
+    }
 }
