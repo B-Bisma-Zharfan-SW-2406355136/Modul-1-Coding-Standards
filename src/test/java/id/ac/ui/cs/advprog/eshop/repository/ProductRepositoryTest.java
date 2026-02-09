@@ -102,4 +102,22 @@ class ProductRepositoryTest {
         assertNotEquals(this.product.getProductName(), "Sampo Cap Bambang 2");
         assertNotEquals(this.product.getProductQuantity(), 115);
     }
+
+    @Test
+    void testDeleteLastProduct(){
+        UUID targetId = this.product.getProductId();
+        this.productRepository.deleteById(targetId);
+
+        Iterator<Product> productIterator = this.productRepository.findAll();
+        assertFalse(productIterator.hasNext());
+    }
+
+    @Test
+    void testDeleteProductNotFound(){
+        UUID randomId = UUID.randomUUID();
+        this.productRepository.deleteById(randomId);
+
+        Iterator<Product> productIterator = this.productRepository.findAll();
+        assertTrue(productIterator.hasNext());
+    }
 }
