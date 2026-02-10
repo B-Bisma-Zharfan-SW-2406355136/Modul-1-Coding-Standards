@@ -1,0 +1,51 @@
+Reflection 1: Evaluasi Clean Code dan Secure Coding Practices
+
+Setelah mengimplementasikan dua fitur baru menggunakan Spring Boot, yaitu Edit Product dan Delete Product, dilakukan evaluasi terhadap 
+penerapan coding standards, prinsip clean code, serta secure coding practices yang telah dipelajari pada modul ini.
+
+Penerapan Clean Code Principles
+Source code telah menerapkan Separation of Concerns dengan baik melalui pemisahan layer Controller, Service, Repository, dan Model. 
+Controller bertanggung jawab menangani request HTTP, Service menangani logika bisnis, dan Repository mengelola penyimpanan data produk. 
+Pemisahan ini membuat kode lebih terstruktur dan mudah dipelihara. Penamaan kelas dan method sudah deskriptif dan konsisten, seperti 
+updateProduct(), deleteProductById(), serta findById(), sehingga tujuan setiap method mudah dipahami. Prinsip Single 
+Responsibility Principle juga diterapkan karena setiap kelas dan method memiliki satu tanggung jawab yang jelas. Penggunaan anotasi 
+pring Boot seperti @Controller, @Service, dan @Repository membantu meningkatkan keterbacaan kode serta mengurangi boilerplate code.
+
+Penerapan Secure Coding Practices
+Pada fitur Edit Product, data produk yang diubah tidak dimanipulasi secara langsung di controller, melainkan melalui service. Hal ini
+membantu menjaga konsistensi data dan mencegah akses langsung ke repository dari controller. Fitur Delete Product juga menggunakan 
+identitas produk (UUID) untuk memastikan produk yang dihapus adalah produk yang benar. Selain itu, penghapusan produk dikonfirmasi 
+melalui antarmuka pengguna (confirmation dialog), sehingga dapat mencegah penghapusan data secara tidak sengaja. Akses data tetap 
+dilakukan melalui repository tanpa penggunaan query mentah, sehingga risiko SQL Injection dapat diminimalkan. Alur HTTP juga tetap 
+terkontrol dengan baik melalui penggunaan redirect setelah operasi POST atau DELETE.
+
+Evaluasi dan Perbaikan
+Beberapa hal yang masih dapat ditingkatkan adalah belum adanya validasi input pada fitur Edit Product, seperti validasi nama produk 
+kosong atau jumlah produk bernilai negatif. Hal ini dapat diperbaiki dengan menambahkan anotasi validasi seperti @NotBlank dan @Min.
+Selain itu, aplikasi belum memiliki mekanisme autentikasi dan otorisasi. Semua pengguna masih dapat mengakses fitur edit dan delete, 
+sehingga pada pengembangan selanjutnya dapat ditambahkan Spring Security untuk membatasi akses terhadap operasi sensitif.
+
+
+
+Reflection 2: 
+1. Setelah menulis unit test, saya merasa lebih percaya diri terhadap stabilitas dan kebenaran kode yang dibuat. Unit test membantu 
+memastikan bahwa setiap fungsi bekerja sesuai dengan yang diharapkan serta memudahkan dalam mendeteksi kesalahan lebih awal sebelum aplikasi 
+dijalankan secara keseluruhan. Selain itu, unit test juga mempermudah proses refactoring karena perubahan kode dapat segera diverifikasi melalui 
+pengujian. Jumlah unit test dalam satu kelas tidak memiliki angka pasti, namun idealnya setiap method dan skenario penting memiliki setidaknya 
+satu unit test. Untuk method yang kompleks, dibutuhkan beberapa unit test guna mencakup berbagai kondisi, seperti input valid, input tidak valid,
+dan edge case. Untuk memastikan unit test yang dibuat sudah cukup, salah satu metrik yang dapat digunakan adalah code coverage. Code coverage 
+menunjukkan seberapa besar bagian kode yang dieksekusi saat pengujian dijalankan, seperti statement coverage atau branch coverage. Meskipun code 
+coverage tinggi (bahkan 100%), hal tersebut tidak menjamin bahwa kode bebas dari bug atau error. Code coverage hanya memastikan bahwa baris kode 
+telah dieksekusi, bukan bahwa logika di dalamnya benar. Oleh karena itu, kualitas test case, variasi skenario, dan ketepatan assertion tetap 
+menjadi faktor yang sangat penting.
+
+2. Pada kasus pembuatan functional test baru untuk memverifikasi jumlah item pada product list, dengan struktur yang mirip dengan 
+CreateProductFunctionalTest.java, terdapat potensi penurunan kualitas clean code jika tidak dikelola dengan baik. Masalah utama yang 
+mungkin muncul adalah duplikasi kode, terutama pada bagian setup seperti inisialisasi WebDriver, URL, dan konfigurasi awal pengujian. 
+Duplikasi ini melanggar prinsip DRY (Don’t Repeat Yourself) dan dapat menyulitkan maintenance. Jika terjadi perubahan pada konfigurasi, 
+maka perubahan harus dilakukan di banyak tempat. Selain itu, adanya banyak kelas test dengan struktur serupa dapat menurunkan keterbacaan 
+kode dan membuat project test menjadi kurang rapi. Hal ini juga bertentangan dengan prinsip Maintainability dalam clean code. Untuk 
+meningkatkan kebersihan kode, solusi yang dapat diterapkan adalah membuat base test class (misalnya BaseFunctionalTest) yang berisi setup 
+dan teardown umum. Kemudian, setiap functional test suite dapat melakukan inheritance dari base class tersebut. Alternatif lain adalah 
+menggunakan utility atau helper class untuk menyimpan fungsi-fungsi yang sering digunakan. Dengan pendekatan ini, kode menjadi lebih modular, 
+mudah dipelihara, dan lebih sesuai dengan prinsip clean code tanpa mengurangi fungsionalitas pengujian.
