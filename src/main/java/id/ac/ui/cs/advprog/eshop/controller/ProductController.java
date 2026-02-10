@@ -5,12 +5,10 @@ import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/product")
@@ -37,5 +35,18 @@ public class ProductController {
         List<Product> allProduct = service.findAll();
         model.addAttribute("products", allProduct);
         return "productList";
+    }
+
+    @GetMapping("/update/{id}")
+    public String productUpdatePage(@PathVariable UUID id, Model model){
+        Product product = service.findById(id);
+        model.addAttribute("product", product);
+        return "updateProduct";
+    }
+
+    @PostMapping("/update")
+    public String productUpdatePost(@ModelAttribute Product product){
+        service.update(product);
+        return "redirect:/product/list";
     }
 }
